@@ -1,4 +1,0 @@
-jupyterlab==4.6.4
-matplotlib==3.11.2
-nbdev==3.3.24
-wigglystuff==0.5.32

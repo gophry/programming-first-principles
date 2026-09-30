@@ -15,7 +15,11 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
 ]
-dependencies = []
+dependencies = [
+    "matplotlib>=3.11",
+    "numpy",
+    "wigglystuff>=0.5",
+]
 
 [project.urls]
 Repository = "https://github.com/gophry/programming-first-principles"
