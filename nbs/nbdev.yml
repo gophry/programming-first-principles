@@ -1,0 +1,14 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "programming-first-principles"
+  site-url: "https://gophry.github.io/programming-first-principles"
+  description: ""
+  repo-branch: main
+  repo-url: "https://github.com/gophry/programming-first-principles"
+
+format-links:
+  - html
+  - format: commonmark
+    text: Markdown

@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "programming-first-principles"
+dynamic = ["version"]
+description = ""
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+authors = [{name = "Yogesh Kamat", email = "ykamat@gmail.com"}]
+keywords = ['nbdev']
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+]
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/gophry/programming-first-principles"
+Documentation = "https://gophry.github.io/programming-first-principles/"
+
+[project.entry-points.nbdev]
+programming_first_principles = "programming_first_principles._modidx:d"
+
+[tool.setuptools.dynamic]
+version = {attr = "programming_first_principles.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["programming_first_principles"]
+
+[tool.nbdev]
+custom_sidebar = true

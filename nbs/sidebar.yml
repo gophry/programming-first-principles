@@ -1,0 +1,20 @@
+website:
+  sidebar:
+    contents:
+      - index.ipynb
+      - section: Core elements
+        contents:
+          - 01_core_elements/01_primitives.ipynb
+          - 01_core_elements/02_namespaces.ipynb
+      - section: Sequences
+        contents:
+          - 02_sequences/01_array.ipynb
+          - 02_sequences/02_slicing.ipynb
+          - 02_sequences/03_iterator-iterable.ipynb
+          - 02_sequences/04_sequence-tuple-list.ipynb
+          - 02_sequences/05_mutability.ipynb
+          - 02_sequences/06_cost-complexity.ipynb
+          - 02_sequences/07_find.ipynb
+          - 02_sequences/08_rearrangement.ipynb
+          - 02_sequences/09_partition.ipynb
+          - 02_sequences/10_ordering.ipynb
