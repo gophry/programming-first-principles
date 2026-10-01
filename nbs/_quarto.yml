@@ -6,6 +6,8 @@ format:
     theme: cosmo
     css: styles.css
     toc: true
+    toc-depth: 4
+    toc-location: right
     keep-md: true
   commonmark: default
 

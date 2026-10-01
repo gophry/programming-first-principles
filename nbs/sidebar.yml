@@ -18,3 +18,4 @@ website:
           - 02_sequences/08_rearrangement.ipynb
           - 02_sequences/09_partition.ipynb
           - 02_sequences/10_ordering.ipynb
+          - 02_sequences/11_sorting.ipynb

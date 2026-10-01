@@ -10,6 +10,7 @@ def prepare_notebook():
     ip = get_ipython()
     if ip is None: return
     from IPython.core.interactiveshell import InteractiveShell
+    InteractiveShell.ast_node_interactivity = "all"
     from array import array
     from pprint import pprint
     from wigglystuff import LiveEdit
@@ -24,7 +25,6 @@ def prepare_notebook():
     from typing import Sequence
     import numpy as np
     import inspect
-    InteractiveShell.ast_node_interactivity = "all"
     ip.user_ns.update(
         array=array, 
         pprint=pprint, 
