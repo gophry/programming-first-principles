@@ -18,6 +18,7 @@ classifiers = [
 dependencies = [
     "matplotlib>=3.11",
     "numpy",
+    "pandas",
     "wigglystuff>=0.5",
 ]
 
