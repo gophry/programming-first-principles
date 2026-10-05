@@ -115,8 +115,8 @@ def binary_search(a, first, last, value):
     """
     Returns whether [first, last) contains a value equivalent to value.
     """
-    # i = lower_bound(a, first, last, value)
-    i = bisect_left(a, value, first, last)
+    i = lower_bound(a, first, last, value)
+    # i = bisect_left(a, value, first, last)
     return i != last and in_order(a[i], value)
 
 # %% ../../nbs/02_sequences/04_sorting/03_sort-101.ipynb #f5f2200b
