@@ -31,3 +31,7 @@ website:
               - 02_sequences/04_sorting/01_selection.ipynb
               - 02_sequences/04_sorting/02_insertion-point.ipynb
               - 02_sequences/04_sorting/03_sort-101.ipynb
+      - section: Helpers/Utils
+        contents:
+          - helpers/cost.ipynb
+          - helpers/predicates.ipynb 
