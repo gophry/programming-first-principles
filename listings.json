@@ -1,0 +1,25 @@
+[
+  {
+    "listing": "/index.html",
+    "items": [
+      "/01_core_elements/01_primitives.html",
+      "/01_core_elements/02_namespaces.html",
+      "/02_sequences/01_arrays/array.html",
+      "/02_sequences/01_arrays/02_slicing.html",
+      "/02_sequences/01_arrays/03_iterator-iterable.html",
+      "/02_sequences/01_arrays/04_mutability.html",
+      "/02_sequences/02_tuple-list/tuple.html",
+      "/02_sequences/02_tuple-list/packing-unpacking.html",
+      "/02_sequences/02_tuple-list/list.html",
+      "/02_sequences/04_sorting/ordering.html",
+      "/02_sequences/04_sorting/sort-introduction.html",
+      "/02_sequences/04_sorting/adjacent-exchange.html",
+      "/02_sequences/04_sorting/binary_search.html",
+      "/02_sequences/04_sorting/insertion.html",
+      "/02_sequences/04_sorting/merge.html",
+      "/helpers/cost.html",
+      "/helpers/predicates.html",
+      "/helpers/variables.html"
+    ]
+  }
+]
