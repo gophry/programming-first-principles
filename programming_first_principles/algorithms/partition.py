@@ -7,9 +7,10 @@ __all__ = ['partition_single_pass', 'partition_two_pointer', 'is_partitioned', '
 
 # %% ../../nbs/02_sequences/03_find-and-permute/04_partition.ipynb #5da32fb5
 from .rearrange import swap
-def partition_single_pass(a, pred):
-    n = 0
-    for i in range(len(a)):
+
+def partition_single_pass(a, first, last, pred):
+    n = first
+    for i in range(first, last):
         if pred(a[i]):
             if n != i:
                 swap(a, n, i)
@@ -18,8 +19,8 @@ def partition_single_pass(a, pred):
 
 # %% ../../nbs/02_sequences/03_find-and-permute/04_partition.ipynb #fd13dc06
 from .rearrange import swap
-def partition_two_pointer(a, pred):
-    lo, hi = 0, len(a) - 1
+def partition_two_pointer(a,first,last, pred):
+    lo, hi = first, last - 1
     while lo <= hi:
         if pred(a[lo]):
             lo += 1
