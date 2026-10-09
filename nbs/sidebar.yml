@@ -28,9 +28,11 @@ website:
               - 02_sequences/03_algorithms-101/05_ordering.ipynb
           - section: Sorting
             contents:
-              - 02_sequences/04_sorting/01_selection.ipynb
-              - 02_sequences/04_sorting/02_insertion-point.ipynb
-              - 02_sequences/04_sorting/03_sort-101.ipynb
+              - 02_sequences/04_sorting/01_introduction.ipynb
+              - 02_sequences/04_sorting/02_adjacent-exchange.ipynb
+              - 02_sequences/04_sorting/03_binary_search.ipynb
+              - 02_sequences/04_sorting/04_insertion.ipynb
+              - 02_sequences/04_sorting/05_merge.ipynb
       - section: Helpers/Utils
         contents:
           - helpers/cost.ipynb
