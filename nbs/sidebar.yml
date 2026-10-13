@@ -4,8 +4,14 @@ website:
       - index.ipynb
       - section: Core elements
         contents:
-          - 01_core_elements/01_primitives.ipynb
-          - 01_core_elements/02_namespaces.ipynb
+          - section: Types, Structures
+            contents:
+              - 01_core_elements/01_types-structures/01_primitives.ipynb
+              - 01_core_elements/01_types-structures/02_collections.ipynb
+          - section: Namespaces
+            contents:
+              - 01_core_elements/02_namespaces/01_names-pointers.ipynb
+              - 01_core_elements/02_namespaces/02_functions.ipynb
       - section: Sequences
         contents:
           - section: Array
