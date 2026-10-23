@@ -25,20 +25,25 @@ website:
               - 02_sequences/02_tuple-list/01_tuple.ipynb
               - 02_sequences/02_tuple-list/02_packing-unpacking.ipynb
               - 02_sequences/02_tuple-list/03_list.ipynb
+          - section: String, Bytes
+            contents:
+              - 02_sequences/03_str/01_str.ipynb
+              - 02_sequences/03_str/02_bytes-bytearray.ipynb
+              - 02_sequences/03_str/03_encoding-decoding.ipynb
           - section: Find and Permute
             contents:
-              - 02_sequences/03_find-and-permute/01_cost-complexity.ipynb
-              - 02_sequences/03_find-and-permute/02_find.ipynb
-              - 02_sequences/03_find-and-permute/03_rearrangement.ipynb
-              - 02_sequences/03_find-and-permute/04_partition.ipynb
+              - 02_sequences/04_find-and-permute/01_cost-complexity.ipynb
+              - 02_sequences/04_find-and-permute/02_find.ipynb
+              - 02_sequences/04_find-and-permute/03_rearrangement.ipynb
+              - 02_sequences/04_find-and-permute/04_partition.ipynb
           - section: Sorting
             contents:
-              - 02_sequences/04_sorting/01_ordering.ipynb
-              - 02_sequences/04_sorting/02_sort-introduction.ipynb
-              - 02_sequences/04_sorting/03_adjacent-exchange.ipynb
-              - 02_sequences/04_sorting/04_binary_search.ipynb
-              - 02_sequences/04_sorting/05_insertion.ipynb
-              - 02_sequences/04_sorting/06_merge.ipynb 
+              - 02_sequences/05_sorting/01_ordering.ipynb
+              - 02_sequences/05_sorting/02_sort-introduction.ipynb
+              - 02_sequences/05_sorting/03_adjacent-exchange.ipynb
+              - 02_sequences/05_sorting/04_binary_search.ipynb
+              - 02_sequences/05_sorting/05_insertion.ipynb
+              - 02_sequences/05_sorting/06_merge.ipynb 
       - section: Helpers/Utils
         contents:
           - helpers/cost.ipynb
