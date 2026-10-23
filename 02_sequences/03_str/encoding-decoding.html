@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Encoding and Decoding – programming-first-principles</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-f2788e636de456f6409e966386820849.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Encoding and Decoding – programming-first-principles">
+<meta property="og:site_name" content="programming-first-principles">
+<meta name="twitter:title" content="Encoding and Decoding – programming-first-principles">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">programming-first-principles</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Sequences</li><li class="breadcrumb-item"><a href="../../02_sequences/03_str/str.html">String, Bytes</a></li><li class="breadcrumb-item"><a href="../../02_sequences/03_str/encoding-decoding.html">Encoding and Decoding</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Programming First Principles</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Core elements</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Types, Structures</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../01_core_elements/01_types-structures/01_primitives.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Primitives</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../01_core_elements/01_types-structures/02_collections.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Collections - Intro</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Namespaces</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../01_core_elements/02_namespaces/names-pointers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Names, Pointers</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../01_core_elements/02_namespaces/functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Functions Intro</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Sequences</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">Array</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_sequences/01_arrays/array.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Array</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_sequences/01_arrays/02_slicing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Slicing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_sequences/01_arrays/03_iterator-iterable.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Iterator and Iterable</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_sequences/01_arrays/04_mutability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Mutability</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Tuple, List</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_sequences/02_tuple-list/tuple.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tuple</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_sequences/02_tuple-list/packing-unpacking.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Packing/Unpacking</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_sequences/02_tuple-list/list.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">List</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">String, Bytes</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_sequences/03_str/str.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">String (<code>str</code>)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_sequences/03_str/bytes-bytearray.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bytes, Bytearray, and Memoryview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_sequences/03_str/encoding-decoding.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Encoding and Decoding</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">Find and Permute</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_sequences/04_find-and-permute/01_cost-complexity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Complexity/Cost Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_sequences/04_find-and-permute/02_find.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Find</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_sequences/04_find-and-permute/rearrangement.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Rearrangement</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_sequences/04_find-and-permute/partition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Partition</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
+ <span class="menu-text">Sorting</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_sequences/05_sorting/ordering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ordering</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_sequences/05_sorting/sort-introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sort - Intro</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_sequences/05_sorting/adjacent-exchange.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Adjacent Exchange</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_sequences/05_sorting/binary_search.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Binary Search</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_sequences/05_sorting/insertion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sorting by Insertion</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../02_sequences/05_sorting/merge.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sorting by Merging</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="true">
+ <span class="menu-text">Helpers/Utils</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../helpers/cost.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cost</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../helpers/predicates.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Predicates</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#encoding-str-bytes-and-decoding-bytes-str" id="toc-encoding-str-bytes-and-decoding-bytes-str" class="nav-link active" data-scroll-target="#encoding-str-bytes-and-decoding-bytes-str">Encoding (<code>str</code> → <code>bytes</code>) and Decoding (<code>bytes</code> → <code>str</code>)</a>
+  <ul>
+  <li><a href="#bytesstr-requires-an-encoding" id="toc-bytesstr-requires-an-encoding" class="nav-link" data-scroll-target="#bytesstr-requires-an-encoding"><code>bytes(str)</code> Requires an Encoding</a></li>
+  <li><a href="#encode-and-.decode-with-utf-8" id="toc-encode-and-.decode-with-utf-8" class="nav-link" data-scroll-target="#encode-and-.decode-with-utf-8"><code>.encode()</code> and <code>.decode()</code> with UTF-8</a></li>
+  <li><a href="#variable-length-encoding-in-utf-8" id="toc-variable-length-encoding-in-utf-8" class="nav-link" data-scroll-target="#variable-length-encoding-in-utf-8">Variable-Length Encoding in UTF-8</a></li>
+  <li><a href="#decoding-a-sequence-of-integer-byte-values" id="toc-decoding-a-sequence-of-integer-byte-values" class="nav-link" data-scroll-target="#decoding-a-sequence-of-integer-byte-values">Decoding a Sequence of Integer Byte Values</a></li>
+  </ul></li>
+  <li><a href="#encoding-is-out-of-band" id="toc-encoding-is-out-of-band" class="nav-link" data-scroll-target="#encoding-is-out-of-band">Encoding is Out-of-Band</a>
+  <ul>
+  <li><a href="#unicodeencodeerror-and-error-handlers-ignore-replace" id="toc-unicodeencodeerror-and-error-handlers-ignore-replace" class="nav-link" data-scroll-target="#unicodeencodeerror-and-error-handlers-ignore-replace"><code>UnicodeEncodeError</code> and Error Handlers (<code>ignore</code>, <code>replace</code>)</a></li>
+  <li><a href="#decoding-with-the-wrong-encoding-mojibake-vs-unicodedecodeerror" id="toc-decoding-with-the-wrong-encoding-mojibake-vs-unicodedecodeerror" class="nav-link" data-scroll-target="#decoding-with-the-wrong-encoding-mojibake-vs-unicodedecodeerror">Decoding with the Wrong Encoding (Mojibake vs <code>UnicodeDecodeError</code>)</a></li>
+  </ul></li>
+  <li><a href="#bytes-at-the-io-and-compression-boundary" id="toc-bytes-at-the-io-and-compression-boundary" class="nav-link" data-scroll-target="#bytes-at-the-io-and-compression-boundary">Bytes at the I/O and Compression Boundary</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/gophry/programming-first-principles/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="encoding-decoding.html.md"><i class="bi bi-file-code"></i>Markdown</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Sequences</li><li class="breadcrumb-item"><a href="../../02_sequences/03_str/str.html">String, Bytes</a></li><li class="breadcrumb-item"><a href="../../02_sequences/03_str/encoding-decoding.html">Encoding and Decoding</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Encoding and Decoding</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<section id="encoding-str-bytes-and-decoding-bytes-str" class="level2">
+<h2 class="anchored" data-anchor-id="encoding-str-bytes-and-decoding-bytes-str">Encoding (<code>str</code> → <code>bytes</code>) and Decoding (<code>bytes</code> → <code>str</code>)</h2>
+<ul>
+<li>Passing a <code>str</code> to <code>bytes(s)</code> without specifying an encoding fails with <code>TypeError: string argument without an encoding</code>.</li>
+<li><code>s.encode(encoding)</code> (or <code>bytes(s, encoding)</code>) converts <code>str</code> to <code>bytes</code>; <code>b.decode(encoding)</code> converts <code>bytes</code> back to <code>str</code>.</li>
+<li>Python’s default text encoding (<code>sys.getdefaultencoding()</code>) is <code>'utf-8'</code>.</li>
+</ul>
+<section id="bytesstr-requires-an-encoding" class="level4">
+<h4 class="anchored" data-anchor-id="bytesstr-requires-an-encoding"><code>bytes(str)</code> Requires an Encoding</h4>
+<div id="enc00006" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>emoji_string <span class="op">=</span> <span class="st">'Python 3 - 🐍 🐍 🐍 😊 😠 😆'</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">bytes</span>(emoji_string)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">TypeError</span> <span class="im">as</span> e:</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f'</span><span class="sc">{</span>e <span class="op">=</span> <span class="sc">}</span><span class="ss">'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>"e = TypeError('string argument without an encoding')"</code></pre>
+</div>
+</div>
+</section>
+<section id="encode-and-.decode-with-utf-8" class="level4">
+<h4 class="anchored" data-anchor-id="encode-and-.decode-with-utf-8"><code>.encode()</code> and <code>.decode()</code> with UTF-8</h4>
+<div id="enc00008" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ss">f'</span><span class="sc">{</span>sys<span class="sc">.</span>getdefaultencoding() <span class="op">=</span> <span class="sc">}</span><span class="ss">'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>"sys.getdefaultencoding() = 'utf-8'"</code></pre>
+</div>
+</div>
+<div id="85b1fd15" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>bytes_utf8 <span class="op">=</span> <span class="bu">bytes</span>(emoji_string, <span class="st">'utf-8'</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>encoded_default <span class="op">=</span> emoji_string.encode()</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ss">f'</span><span class="sc">{</span>bytes_utf8 <span class="op">==</span> encoded_default <span class="op">=</span> <span class="sc">}</span><span class="ss">'</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ss">f'</span><span class="sc">{</span>encoded_default <span class="op">=</span> <span class="sc">}</span><span class="ss">'</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="ss">f'</span><span class="sc">{</span>encoded_default<span class="sc">.</span>decode(<span class="st">"utf-8"</span>) <span class="op">=</span> <span class="sc">}</span><span class="ss">'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>'bytes_utf8 == encoded_default = True'</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>"encoded_default = b'Python 3 - \\xf0\\x9f\\x90\\x8d \\xf0\\x9f\\x90\\x8d \\xf0\\x9f\\x90\\x8d \\xf0\\x9f\\x98\\x8a \\xf0\\x9f\\x98\\xa0 \\xf0\\x9f\\x98\\x86'"</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>'encoded_default.decode("utf-8") = \'Python 3 - 🐍 🐍 🐍 😊 😠 😆\''</code></pre>
+</div>
+</div>
+</section>
+<section id="variable-length-encoding-in-utf-8" class="level4">
+<h4 class="anchored" data-anchor-id="variable-length-encoding-in-utf-8">Variable-Length Encoding in UTF-8</h4>
+<ul>
+<li>UTF-8 (designed by Ken Thompson and Rob Pike) is a variable-width encoding: ASCII code points (<code>U+0000</code>..<code>U+007F</code>) use 1 byte, while supplementary code points like emojis (<code>U+10000</code>..<code>U+10FFFF</code>) use 4 bytes.</li>
+</ul>
+<div id="enc00010" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ascii_char <span class="op">=</span> emoji_string[<span class="dv">0</span>]     <span class="co"># 'P'</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>emoji_char <span class="op">=</span> emoji_string[<span class="dv">19</span>]    <span class="co"># '😠'</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ss">f'</span><span class="sc">{</span>ascii_char <span class="op">=</span> <span class="sc">}</span><span class="ss">, </span><span class="sc">{</span><span class="bu">ord</span>(ascii_char) <span class="op">=</span> <span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>ascii_char<span class="sc">.</span>encode(<span class="st">"utf-8"</span>) <span class="op">=</span> <span class="sc">}</span><span class="ss">, </span><span class="sc">{</span><span class="bu">len</span>(ascii_char.encode(<span class="st">"utf-8"</span>)) <span class="op">=</span> <span class="sc">}</span><span class="ss">'</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ss">f'</span><span class="sc">{</span>emoji_char <span class="op">=</span> <span class="sc">}</span><span class="ss">, </span><span class="sc">{</span><span class="bu">ord</span>(emoji_char) <span class="op">=</span> <span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>emoji_char<span class="sc">.</span>encode(<span class="st">"utf-8"</span>) <span class="op">=</span> <span class="sc">}</span><span class="ss">, </span><span class="sc">{</span><span class="bu">len</span>(emoji_char.encode(<span class="st">"utf-8"</span>)) <span class="op">=</span> <span class="sc">}</span><span class="ss">'</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ss">f'</span><span class="sc">{</span><span class="bu">len</span>(emoji_string) <span class="op">=</span> <span class="sc">}</span><span class="ss"> code points vs </span><span class="sc">{</span><span class="bu">len</span>(emoji_string.encode(<span class="st">"utf-8"</span>)) <span class="op">=</span> <span class="sc">}</span><span class="ss"> UTF-8 bytes'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>'ascii_char = \'P\', ord(ascii_char) = 80, ascii_char.encode("utf-8") = b\'P\', len(ascii_char.encode("utf-8")) = 1'</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>'emoji_char = \'😠\', ord(emoji_char) = 128544, emoji_char.encode("utf-8") = b\'\\xf0\\x9f\\x98\\xa0\', len(emoji_char.encode("utf-8")) = 4'</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>'len(emoji_string) = 22 code points vs len(emoji_string.encode("utf-8")) = 40 UTF-8 bytes'</code></pre>
+</div>
+</div>
+</section>
+<section id="decoding-a-sequence-of-integer-byte-values" class="level4">
+<h4 class="anchored" data-anchor-id="decoding-a-sequence-of-integer-byte-values">Decoding a Sequence of Integer Byte Values</h4>
+<div id="enc00012" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>bytes_sequence <span class="op">=</span> <span class="bu">bytes</span>([</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">80</span>, <span class="dv">121</span>, <span class="dv">116</span>, <span class="dv">104</span>, <span class="dv">111</span>, <span class="dv">110</span>, <span class="dv">32</span>, <span class="dv">51</span>, <span class="dv">32</span>, <span class="dv">45</span>, <span class="dv">32</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">240</span>, <span class="dv">159</span>, <span class="dv">144</span>, <span class="dv">141</span>, <span class="dv">32</span>, <span class="dv">240</span>, <span class="dv">159</span>, <span class="dv">144</span>, <span class="dv">141</span>, <span class="dv">32</span>, <span class="dv">240</span>, <span class="dv">159</span>, <span class="dv">144</span>, <span class="dv">141</span>, <span class="dv">32</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">240</span>, <span class="dv">159</span>, <span class="dv">152</span>, <span class="dv">138</span>, <span class="dv">32</span>, <span class="dv">240</span>, <span class="dv">159</span>, <span class="dv">152</span>, <span class="dv">160</span>, <span class="dv">32</span>, <span class="dv">240</span>, <span class="dv">159</span>, <span class="dv">152</span>, <span class="dv">134</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>decoded_str <span class="op">=</span> bytes_sequence.decode(<span class="st">'utf-8'</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="ss">f'</span><span class="sc">{</span>decoded_str <span class="op">=</span> <span class="sc">}</span><span class="ss">'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>"decoded_str = 'Python 3 - 🐍 🐍 🐍 😊 😠 😆'"</code></pre>
+</div>
+</div>
+<div id="dd99d621" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ss">f'</span><span class="sc">{</span>sys<span class="sc">.</span>getsizeof(bytes_sequence) <span class="op">=</span> <span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>sys<span class="sc">.</span>getsizeof(decoded_str) <span class="op">=</span> <span class="sc">}</span><span class="ss">'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>'sys.getsizeof(bytes_sequence) = 73, sys.getsizeof(decoded_str) = 148'</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="encoding-is-out-of-band" class="level2">
+<h2 class="anchored" data-anchor-id="encoding-is-out-of-band">Encoding is Out-of-Band</h2>
+<ul>
+<li>Raw bytes do not store which encoding produced them; the encoding must be known out-of-band.</li>
+<li>Encoding a character that does not exist in the target character set (such as emojis in <code>ascii</code> or <code>iso-8859-1</code>) raises <code>UnicodeEncodeError</code> unless an <code>errors</code> policy (<code>'ignore'</code>, <code>'replace'</code>) is specified.</li>
+<li>Decoding bytes with the wrong encoding either raises <code>UnicodeDecodeError</code> or silently produces garbled text (<em>mojibake</em>).</li>
+</ul>
+<section id="unicodeencodeerror-and-error-handlers-ignore-replace" class="level4">
+<h4 class="anchored" data-anchor-id="unicodeencodeerror-and-error-handlers-ignore-replace"><code>UnicodeEncodeError</code> and Error Handlers (<code>ignore</code>, <code>replace</code>)</h4>
+<div id="enc00015" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>my_string <span class="op">=</span> <span class="st">'Python 3 - 🙂 😠 😀'</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    my_string.encode(<span class="st">'ascii'</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">UnicodeEncodeError</span> <span class="im">as</span> e:</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f'</span><span class="sc">{</span>e <span class="op">=</span> <span class="sc">}</span><span class="ss">'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>"e = UnicodeEncodeError('ascii', 'Python 3 - 🙂 😠 😀', 11, 12, 'ordinal not in range(128)')"</code></pre>
+</div>
+</div>
+<div id="b851945e" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    my_string.encode(<span class="st">'iso-8859-1'</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">UnicodeEncodeError</span> <span class="im">as</span> e:</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f'</span><span class="sc">{</span>e <span class="op">=</span> <span class="sc">}</span><span class="ss">'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>"e = UnicodeEncodeError('latin-1', 'Python 3 - 🙂 😠 😀', 11, 12, 'ordinal not in range(256)')"</code></pre>
+</div>
+</div>
+<div id="c5947f5e" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ss">f'</span><span class="sc">{</span>my_string<span class="sc">.</span>encode(encoding<span class="op">=</span><span class="st">"iso-8859-1"</span>, errors<span class="op">=</span><span class="st">"ignore"</span>) <span class="op">=</span> <span class="sc">}</span><span class="ss">'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>'my_string.encode(encoding="iso-8859-1", errors="ignore") = b\'Python 3 -   \''</code></pre>
+</div>
+</div>
+<div id="7dbebf0c" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ss">f'</span><span class="sc">{</span>my_string<span class="sc">.</span>encode(encoding<span class="op">=</span><span class="st">"ascii"</span>, errors<span class="op">=</span><span class="st">"replace"</span>) <span class="op">=</span> <span class="sc">}</span><span class="ss">'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>'my_string.encode(encoding="ascii", errors="replace") = b\'Python 3 - ? ? ?\''</code></pre>
+</div>
+</div>
+</section>
+<section id="decoding-with-the-wrong-encoding-mojibake-vs-unicodedecodeerror" class="level4">
+<h4 class="anchored" data-anchor-id="decoding-with-the-wrong-encoding-mojibake-vs-unicodedecodeerror">Decoding with the Wrong Encoding (Mojibake vs <code>UnicodeDecodeError</code>)</h4>
+<div id="enc00017" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">b'</span><span class="ch">\xed</span><span class="st">'</span>.decode(<span class="st">'utf-8'</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">UnicodeDecodeError</span> <span class="im">as</span> e:</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f'</span><span class="sc">{</span>e <span class="op">=</span> <span class="sc">}</span><span class="ss">'</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>raw_stream <span class="op">=</span> my_string.encode(<span class="st">'utf-8'</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>read_as_iso <span class="op">=</span> TextIOWrapper(BytesIO(raw_stream), encoding<span class="op">=</span><span class="st">'iso-8859-1'</span>).read()</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>read_as_utf8 <span class="op">=</span> TextIOWrapper(BytesIO(raw_stream), encoding<span class="op">=</span><span class="st">'utf-8'</span>).read()</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="ss">f'</span><span class="sc">{</span>read_as_iso <span class="op">=</span> <span class="sc">}</span><span class="ss">'</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="ss">f'</span><span class="sc">{</span>read_as_utf8 <span class="op">=</span> <span class="sc">}</span><span class="ss">'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>"e = UnicodeDecodeError('utf-8', b'\\xed', 0, 1, 'unexpected end of data')"</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>"read_as_iso = 'Python 3 - ð\\x9f\\x99\\x82 ð\\x9f\\x98\\xa0 ð\\x9f\\x98\\x80'"</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>"read_as_utf8 = 'Python 3 - 🙂 😠 😀'"</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="bytes-at-the-io-and-compression-boundary" class="level2">
+<h2 class="anchored" data-anchor-id="bytes-at-the-io-and-compression-boundary">Bytes at the I/O and Compression Boundary</h2>
+<ul>
+<li>Operations on binary data (network sockets, file hashes, compression) operate on <code>bytes</code> (or buffer-protocol objects like <code>bytearray</code> and <code>memoryview</code>), not <code>str</code>.</li>
+<li>Gzip compress</li>
+</ul>
+<div id="enc00019" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    compress(<span class="st">'python3'</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">TypeError</span> <span class="im">as</span> e:</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f'</span><span class="sc">{</span>e <span class="op">=</span> <span class="sc">}</span><span class="ss">'</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>compressed <span class="op">=</span> compress(<span class="st">'python3'</span>.encode(<span class="st">'utf-8'</span>))</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="ss">f'</span><span class="sc">{</span>compressed <span class="op">=</span> <span class="sc">}</span><span class="ss">'</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="ss">f'</span><span class="sc">{</span>compress(<span class="st">b"python3"</span>) <span class="op">==</span> compressed <span class="op">=</span> <span class="sc">}</span><span class="ss">'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>'e = TypeError("a bytes-like object is required, not \'str\'")'</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>"compressed = b'\\x1f\\x8b\\x08\\x00\\x14\\xf6\\xdaj\\x02\\xff+\\xa8,\\xc9\\xc8\\xcf3\\x06\\x00\\x9da\\xcc\\xa8\\x07\\x00\\x00\\x00'"</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>'compress(b"python3") == compressed = True'</code></pre>
+</div>
+</div>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ul>
+<li><a href="https://doc.cat-v.org/plan_9/4th_edition/papers/utf">Ken Thompson &amp; Rob Pike – UTF-8 (1993 USENIX Paper)</a></li>
+<li><a href="https://docs.python.org/3/howto/unicode.html">Python Unicode HOWTO (A. M. Kuchling)</a></li>
+<li><a href="https://docs.python.org/3/library/codecs.html">Python Library Reference – <code>codecs</code> and Standard Encodings</a></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/gophry\.github\.io\/programming-first-principles");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/gophry/programming-first-principles/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

@@ -1,0 +1,34 @@
+[
+  {
+    "listing": "/index.html",
+    "items": [
+      "/01_core_elements/01_types-structures/01_primitives.html",
+      "/01_core_elements/01_types-structures/02_collections.html",
+      "/01_core_elements/02_namespaces/names-pointers.html",
+      "/01_core_elements/02_namespaces/functions.html",
+      "/02_sequences/01_arrays/array.html",
+      "/02_sequences/01_arrays/02_slicing.html",
+      "/02_sequences/01_arrays/03_iterator-iterable.html",
+      "/02_sequences/01_arrays/04_mutability.html",
+      "/02_sequences/02_tuple-list/tuple.html",
+      "/02_sequences/02_tuple-list/packing-unpacking.html",
+      "/02_sequences/02_tuple-list/list.html",
+      "/02_sequences/03_str/str.html",
+      "/02_sequences/03_str/bytes-bytearray.html",
+      "/02_sequences/03_str/encoding-decoding.html",
+      "/02_sequences/04_find-and-permute/01_cost-complexity.html",
+      "/02_sequences/04_find-and-permute/02_find.html",
+      "/02_sequences/04_find-and-permute/rearrangement.html",
+      "/02_sequences/04_find-and-permute/partition.html",
+      "/02_sequences/05_sorting/ordering.html",
+      "/02_sequences/05_sorting/sort-introduction.html",
+      "/02_sequences/05_sorting/adjacent-exchange.html",
+      "/02_sequences/05_sorting/binary_search.html",
+      "/02_sequences/05_sorting/insertion.html",
+      "/02_sequences/05_sorting/merge.html",
+      "/helpers/cost.html",
+      "/helpers/predicates.html",
+      "/helpers/variables.html"
+    ]
+  }
+]
